@@ -12,10 +12,10 @@ namespace Game.Mephistoss.PanelMachine.Scripts
 
         private bool _transition = true;
 
-        private void Start()
+        private void Awake()
         {
             _panels = new List<PanelBase>();
-            if(_startPanel!=null)
+            if (_startPanel != null)
                 AddPanel(_startPanel);
         }
 

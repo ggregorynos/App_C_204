@@ -20,7 +20,7 @@ namespace Game.Scripts.Game.DailyBonus
         public void UpdateRewardsTxt()
         {
             coinTxt.gameObject.SetActive(true);
-            coinTxt.text = _rewardData.CoinReward + "";
+            coinTxt.text = _rewardData.Xreward + "";
         }
     }
 }

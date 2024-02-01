@@ -11,56 +11,19 @@ namespace CodeHub.OtherUtilities
 
         private bool _hasSprite;
 
-        public void Initialize()
+        private void Start()
         {
-            _playerDatabase.OnPlayerBalanceChange += UpdatePlayerBalanceTxtByValue;
-            CheckSprite();
+            _playerDatabase.OnPlayerBalanceChange += UpdatePlayerBalanceTxt;
+            UpdatePlayerBalanceTxt(0);
         }
 
-        private void CheckSprite()
-        {
-            foreach (var playerBalanceTxt in _playerBalanceTxt)
-            {
-                if (playerBalanceTxt != null && playerBalanceTxt.text.Contains("<sprite=0>"))
-                {
-                    _hasSprite = true;
-                    break;
-                }
-            }
-        }
-
-        public void UpdatePlayerBalanceTxt()
+        public void UpdatePlayerBalanceTxt(int value)
         {
             foreach (var playerBalanceTxt in _playerBalanceTxt)
             {
                 if (playerBalanceTxt != null)
                 {
-                    if (_hasSprite)
-                    {
-                        playerBalanceTxt.text = "<sprite=0>" + _playerDatabase.PlayerBalance;
-                    }
-                    else
-                    {
-                        playerBalanceTxt.text = _playerDatabase.PlayerBalance.ToString();
-                    }
-                }
-            }
-        }
-
-        private void UpdatePlayerBalanceTxtByValue(int value)
-        {
-            foreach (var playerBalanceTxt in _playerBalanceTxt)
-            {
-                if (playerBalanceTxt != null)
-                {
-                    if (_hasSprite)
-                    {
-                        playerBalanceTxt.text = "<sprite=0>" + value;
-                    }
-                    else
-                    {
-                        playerBalanceTxt.text = value.ToString();
-                    }
+                    playerBalanceTxt.text = _playerDatabase.PlayerBalance + "";
                 }
             }
         }
