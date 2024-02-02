@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +7,6 @@ using DG.Tweening;
 using Game.Mephistoss.PanelMachine.Scripts;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Game.Scripts.Game.DailyBonus
 {
@@ -105,7 +103,7 @@ namespace Game.Scripts.Game.DailyBonus
             if (_currentRewardData == _rewards.FirstOrDefault())
                 _rewardTxt.text = sector.Value + "";
             else
-                _rewardTxt.text = sector.Value + " x" + _currentRewardData.Xreward;
+                _rewardTxt.text = sector.Value.ToString("# ##0") + " X" + _currentRewardData.Xreward;
 
             _playerDatabase.IncreasePlayerBalance(sector.Value * _currentRewardData.Xreward);
         }
@@ -120,14 +118,14 @@ namespace Game.Scripts.Game.DailyBonus
         {
             var element = _multiplierButtons.Where((button => button.RewardData == rewardData)).FirstOrDefault();
             if (element != null)
-                element.Button.interactable = true;
+                element.EnableBtn();
         }
 
         private void DisableAllxElements()
         {
             foreach (var element in _multiplierButtons)
             {
-                element.Button.interactable = false;
+                element.DisableBtn();
             }
         }
     }
