@@ -14,6 +14,7 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
 
         public void Initialize()
         {
+            SetLocalBet(_minimalBet);
             UpdateBetTxt();
         }
 
@@ -31,7 +32,7 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
 
         private void SetLocalBet(int newBet)
         {
-            int clampBet = Math.Clamp(newBet, 0, _maxBet);
+            int clampBet = Math.Clamp(newBet, _minimalBet, _maxBet);
             if (_betContext.CanAddBet(clampBet))
                 _betContext.SetLocalBet(clampBet);
         }

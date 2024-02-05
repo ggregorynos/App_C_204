@@ -11,16 +11,27 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
         public List<NumberData> Numbers => _numbers;
         public List<ColorData> Colors => _colorsData;
 
+        public BetDataHolder()
+        {
+            Reset();
+        }
+
         public void Reset()
         {
             _numbers = new List<NumberData>();
             _colorsData = new List<ColorData>();
         }
 
-        public void AddNumber(NumberData numberData) => 
+        public void AddNumber(NumberData numberData) =>
             _numbers.Add(numberData);
 
-        public void AddColor(ColorData colorData) => 
+        public void AddColor(ColorData colorData) =>
             _colorsData.Add(colorData);
+
+        public void RemoveNumber(NumberData numberData) =>
+            _numbers.Remove(numberData);
+
+        public void RemoveColor(ColorData colorData) =>
+            _colorsData.Remove(colorData);
     }
 }

@@ -1,12 +1,12 @@
 using Game.Scripts.Game.GameLogic.BetLogic;
 using UnityEngine;
 
-namespace Game.Scripts.Game.GameLogic.GameData
+namespace Game.Scripts.Game.GameLogic
 {
     public class GameContext : MonoBehaviour
     {
         [SerializeField] private BetContext _betContext;
-        [SerializeField] private BetContext _betInputController;
+        [SerializeField] private BetInputController _betInputController;
 
         private void Start()
         {
