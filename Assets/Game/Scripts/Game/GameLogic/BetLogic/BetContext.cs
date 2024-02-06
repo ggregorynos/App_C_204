@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using CodeHub.OtherUtilities;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.Scripts.Game.GameLogic.BetLogic
 {
     public class BetContext : MonoBehaviour
     {
+        [SerializeField] private BetInputController _betInputController;
         [SerializeField] private TMP_Text _winTxt;
+        [SerializeField] private Button _playBtn;
         [SerializeField] private List<BaseBetButton> _betButtons;
         [SerializeField] private PlayerDatabase _playerDatabase;
         public int LocalBet { get; private set; }
@@ -24,6 +27,8 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
             BetDataHolder = new BetDataHolder();
             LocalBet = 0;
             _winCount = 0;
+            UpdateWinTxt();
+            UpdatePlayBtnStatus();
             InitializeBetButtons();
         }
 
@@ -32,6 +37,8 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
             if (button.HasActive)
             {
                 RemoveBetData(button);
+                UpdatePlayBtnStatus();
+                _betInputController.UpdateBtns();
                 return;
             }
 
@@ -48,6 +55,8 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
             }
 
             AddBetData(button);
+            UpdatePlayBtnStatus();
+            _betInputController.UpdateBtns();
         }
 
         public void ResetField()
@@ -70,6 +79,9 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
             _winCount += plusValue;
             UpdateWinTxt();
         }
+
+        public void UpdatePlayBtnStatus() =>
+            _playBtn.interactable = !(BetDataHolder.Colors.Count == 0 && BetDataHolder.Numbers.Count == 0);
 
         private void AddBetData(BaseBetButton baseBetButton)
         {
@@ -121,7 +133,7 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
             }
         }
 
-        private void UpdateWinTxt() => 
+        private void UpdateWinTxt() =>
             _winTxt.text = _winCount + "";
     }
 }

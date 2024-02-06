@@ -26,25 +26,37 @@ namespace Game.Scripts.Game.GameLogic
 
         [SerializeField] private RectTransform wheelParts;
         [SerializeField] private RectTransform ballParent;
+        [SerializeField] private GameObject _ball;
+        [SerializeField] private Transform _ballEndPoint;
 
         private float sectorAngle;
 
-        public void Play()
+        private Vector3 _startBallPosition;
+
+        private void Start()
         {
-            //todo make roulette animation
-            _inputController.SetEnableButtons(false);
-            _inputController.SetEnableOverlayClickBlockers(true);
-            var randomNumber = GetRandomNumber();
-            DOVirtual.DelayedCall(3f, () => _resultPanel.ShowPanel(randomNumber));
-
-            StartBet(); //todo change 
-
-            Spin(randomNumber);
+            _startBallPosition = _ball.transform.position;
         }
 
-        private void StartBet()
+        public void Play()
         {
+            DisableInput();
+
+            var randomNumber = GetRandomNumber();
+
+            ballParent.rotation = Quaternion.identity;
+            _ball.transform.position = _startBallPosition;
+
             _playerDatabase.IncreasePlayerBalance(-_betContext.GetAllBetCount());
+            
+            Spin(randomNumber);
+            RotateBall((() => _resultPanel.ShowPanel(randomNumber)));
+        }
+
+        private void DisableInput()
+        {
+            _inputController.SetEnableButtons(false);
+            _inputController.SetEnableOverlayClickBlockers(true);
         }
 
         private NumberData GetRandomNumber()
@@ -64,9 +76,16 @@ namespace Game.Scripts.Game.GameLogic
             wheelParts.DORotate(new Vector3(0f, 0f, (-fullCircles * 360f) - finalAngle), rotationTime * fullCircles,
                     RotateMode.FastBeyond360)
                 .SetEase(Ease.OutQuint);
-            ballParent.DORotate(new Vector3(0f, 0f, (-maxRotateBallWheel * 360f)), ballRotateTime * fullCircles,
+        }
+
+        public void RotateBall(Action onComplete = null)
+        {
+            ballParent.DORotate(new Vector3(0f, 0f, (-maxRotateBallWheel * 360f)), ballRotateTime * maxRotateBallWheel,
                     RotateMode.FastBeyond360)
-                .SetEase(Ease.OutQuint).OnComplete((() => onComplete?.Invoke()));
+                .SetEase(Ease.Linear).OnComplete((() =>
+                {
+                    _ball.transform.DOMove(_ballEndPoint.position, 0.5f).SetEase(Ease.Linear).OnComplete((() => onComplete?.Invoke()));
+                }));
         }
     }
 }

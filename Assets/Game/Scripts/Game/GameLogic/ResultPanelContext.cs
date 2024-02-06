@@ -11,6 +11,9 @@ namespace Game.Scripts.Game.GameLogic
 {
     public class ResultPanelContext : MonoBehaviour
     {
+        private const int MultiplyNumberReward = 4;
+        private const int MultiplyColorReward = 2;
+
         [SerializeField] private PlayerDatabase _playerDatabase;
         [SerializeField] private PanelMachine _panelMachine;
         [SerializeField] private LocalPlayerInputController _playerInputController;
@@ -19,6 +22,7 @@ namespace Game.Scripts.Game.GameLogic
         [SerializeField] private PanelBase _winPanel;
 
         [SerializeField] private BetContext _betContext;
+        [SerializeField] private BetInputController _betInputController;
 
         [SerializeField] private Image _cardBack;
         [SerializeField] private TMP_Text _cardNumber;
@@ -52,9 +56,10 @@ namespace Game.Scripts.Game.GameLogic
                 DOVirtual.DelayedCall(_durationWinPanel, ReturnToGame);
             }
             else
-            {
                 ReturnToGame();
-            }
+
+            _betInputController.CheckLocalBet();
+            _betContext.UpdatePlayBtnStatus();
         }
 
         private void ReturnToGame()
@@ -73,23 +78,21 @@ namespace Game.Scripts.Game.GameLogic
             int colorReward = 0;
             if (HasWinNumber(numberData))
             {
-                numberReward = _betContext.LocalBet * 2;
+                numberReward = _betContext.LocalBet * MultiplyNumberReward;
                 _playerDatabase.IncreasePlayerBalance(numberReward);
             }
 
             if (HasWinColor(numberData))
             {
-                colorReward = (int)(_betContext.LocalBet * 0.5);
+                colorReward = _betContext.LocalBet * MultiplyColorReward;
                 _playerDatabase.IncreasePlayerBalance(colorReward);
             }
 
             return numberReward + colorReward;
         }
 
-        private bool HasSomeReward(NumberData numberData)
-        {
-            return HasWinNumber(numberData) || HasWinColor(numberData);
-        }
+        private bool HasSomeReward(NumberData numberData) =>
+            HasWinNumber(numberData) || HasWinColor(numberData);
 
         private bool HasWinNumber(NumberData numberData) =>
             _betContext.BetDataHolder.Numbers.Contains(numberData);
