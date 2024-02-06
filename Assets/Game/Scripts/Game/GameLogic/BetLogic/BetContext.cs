@@ -14,6 +14,9 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
         [SerializeField] private Button _playBtn;
         [SerializeField] private List<BaseBetButton> _betButtons;
         [SerializeField] private PlayerDatabase _playerDatabase;
+
+        [SerializeField] private AudioSource _click;
+
         public int LocalBet { get; private set; }
         public BetDataHolder BetDataHolder { get; private set; }
 
@@ -34,6 +37,7 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
 
         public void ClickOnBetButton(BaseBetButton button)
         {
+            _click.Play();
             if (button.HasActive)
             {
                 RemoveBetData(button);

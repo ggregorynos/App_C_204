@@ -16,6 +16,9 @@ namespace Game.Scripts.Game.GameLogic
         [SerializeField] private PanelBase _noCoinPanel;
         [SerializeField] private float _noCoinDurationPanel;
 
+        [SerializeField] private AudioSource _notCoin;
+
+
         private Tween _closePanelTween;
 
         private void Start()
@@ -49,6 +52,8 @@ namespace Game.Scripts.Game.GameLogic
         {
             _panelMachine.AddPanel(_noCoinPanel);
             _closePanelTween = DOVirtual.DelayedCall(_noCoinDurationPanel, (() => _panelMachine.CloseLastPanel()));
+
+            _notCoin.Play();
         }
 
         private void OnDestroy()

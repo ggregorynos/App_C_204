@@ -29,6 +29,9 @@ namespace Game.Scripts.Game.GameLogic
         [SerializeField] private GameObject _ball;
         [SerializeField] private Transform _ballEndPoint;
 
+        [SerializeField] private AudioSource _spin;
+        [SerializeField] private AudioSource _cardPanel;
+
         private float sectorAngle;
 
         private Vector3 _startBallPosition;
@@ -48,9 +51,15 @@ namespace Game.Scripts.Game.GameLogic
             _ball.transform.position = _startBallPosition;
 
             _playerDatabase.IncreasePlayerBalance(-_betContext.GetAllBetCount());
-            
             Spin(randomNumber);
-            RotateBall((() => _resultPanel.ShowPanel(randomNumber)));
+            RotateBall((() =>
+            {
+                _resultPanel.ShowPanel(randomNumber);
+                _spin.Stop();
+                _cardPanel.Play();
+            }));
+
+            _spin.Play();
         }
 
         private void DisableInput()
@@ -84,7 +93,8 @@ namespace Game.Scripts.Game.GameLogic
                     RotateMode.FastBeyond360)
                 .SetEase(Ease.Linear).OnComplete((() =>
                 {
-                    _ball.transform.DOMove(_ballEndPoint.position, 0.5f).SetEase(Ease.Linear).OnComplete((() => onComplete?.Invoke()));
+                    _ball.transform.DOMove(_ballEndPoint.position, 0.5f).SetEase(Ease.Linear)
+                        .OnComplete((() => onComplete?.Invoke()));
                 }));
         }
     }

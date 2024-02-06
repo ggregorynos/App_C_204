@@ -31,6 +31,9 @@ namespace Game.Scripts.Game.GameLogic
         [SerializeField] private float _durationCardPanel;
         [SerializeField] private float _durationWinPanel;
 
+        [SerializeField] private AudioSource _win;
+
+
         public void ShowPanel(NumberData numberData)
         {
             UpdateCardPanel(numberData);
@@ -54,12 +57,11 @@ namespace Game.Scripts.Game.GameLogic
                 _betContext.IncreaseWinCount(reward);
                 _winCountTxt.text = reward + "";
                 DOVirtual.DelayedCall(_durationWinPanel, ReturnToGame);
+
+                _win.Play();
             }
             else
                 ReturnToGame();
-
-            _betInputController.CheckLocalBet();
-            _betContext.UpdatePlayBtnStatus();
         }
 
         private void ReturnToGame()
@@ -70,6 +72,9 @@ namespace Game.Scripts.Game.GameLogic
             _playerInputController.SetEnableOverlayClickBlockers(false);
 
             _betContext.ResetField();
+
+            _betInputController.CheckLocalBet();
+            _betContext.UpdatePlayBtnStatus();
         }
 
         private int GetReward(NumberData numberData)

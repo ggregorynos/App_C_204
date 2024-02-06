@@ -8,6 +8,7 @@ namespace Game.Scripts.Game.ShopElementsLogic
     public class ShopContext : MonoBehaviour
     {
         [SerializeField] private PlayerDatabase _playerDatabase;
+        [SerializeField] private AudioSource _getReward;
         [SerializeField] private List<ShopElement> _elements;
         private const string CurrentAdsAlias = "CurrentAdsAlias";
 
@@ -33,6 +34,8 @@ namespace Game.Scripts.Game.ShopElementsLogic
             _playerDatabase.IncreasePlayerBalance(shopElement.RewardValue);
             CurrentAdsIndex++;
             UpdateAdsBtns();
+
+            _getReward.Play();
         }
 
         private void UpdateAdsBtns()
@@ -41,7 +44,7 @@ namespace Game.Scripts.Game.ShopElementsLogic
             {
                 element.EnableAdsBtn(false);
             }
-            
+
             _elements[CurrentAdsIndex].EnableAdsBtn(true);
         }
 
@@ -50,7 +53,7 @@ namespace Game.Scripts.Game.ShopElementsLogic
             get => PlayerPrefs.GetInt(CurrentAdsAlias, 0);
             set
             {
-                var clampValue= Math.Clamp(value, 0, _elements.Count - 1);
+                var clampValue = Math.Clamp(value, 0, _elements.Count - 1);
                 PlayerPrefs.SetInt(CurrentAdsAlias, clampValue);
                 PlayerPrefs.Save();
             }
