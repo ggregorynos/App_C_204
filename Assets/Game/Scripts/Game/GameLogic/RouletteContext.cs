@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CodeHub.OtherUtilities;
 using DG.Tweening;
+using Game.Mephistoss.PanelMachine.Scripts;
 using Game.Scripts.Game.GameLogic.BetLogic;
 using Game.Scripts.Game.GameLogic.GameData;
 using UnityEngine;
@@ -11,6 +12,8 @@ namespace Game.Scripts.Game.GameLogic
 {
     public class RouletteContext : MonoBehaviour
     {
+        [SerializeField] private PanelMachine _panelMachine;
+        [SerializeField] private PanelBase _roulettePanel;
         [SerializeField] private PlayerDatabase _playerDatabase;
         [SerializeField] private BetContext _betContext;
         [SerializeField] private LocalPlayerInputController _inputController;
@@ -38,22 +41,24 @@ namespace Game.Scripts.Game.GameLogic
 
         private void Start()
         {
-            _startBallPosition = _ball.transform.position;
+            _startBallPosition = _ball.transform.localPosition;
         }
 
         public void Play()
         {
             DisableInput();
+            _panelMachine.AddPanel(_roulettePanel);
 
             var randomNumber = GetRandomNumber();
 
             ballParent.rotation = Quaternion.identity;
-            _ball.transform.position = _startBallPosition;
+            _ball.transform.localPosition = _startBallPosition;
 
             _playerDatabase.IncreasePlayerBalance(-_betContext.GetAllBetCount());
             Spin(randomNumber);
             RotateBall((() =>
             {
+                _panelMachine.CloseLastPanel();
                 _resultPanel.ShowPanel(randomNumber);
                 _spin.Stop();
                 _cardPanel.Play();
@@ -74,7 +79,7 @@ namespace Game.Scripts.Game.GameLogic
             return _numbers[randomIndex];
         }
 
-        public void Spin(NumberData numberData, Action onComplete = null)
+        private void Spin(NumberData numberData, Action onComplete = null)
         {
             sectorAngle = 360f / _numbers.Count;
 
@@ -87,15 +92,17 @@ namespace Game.Scripts.Game.GameLogic
                 .SetEase(Ease.OutQuint);
         }
 
-        public void RotateBall(Action onComplete = null)
+        private void RotateBall(Action onComplete = null)
         {
             ballParent.DORotate(new Vector3(0f, 0f, (-maxRotateBallWheel * 360f)), ballRotateTime * maxRotateBallWheel,
                     RotateMode.FastBeyond360)
-                .SetEase(Ease.Linear).OnComplete((() =>
-                {
-                    _ball.transform.DOMove(_ballEndPoint.position, 0.5f).SetEase(Ease.Linear)
-                        .OnComplete((() => onComplete?.Invoke()));
-                }));
+                .SetEase(Ease.Linear).OnComplete((() => { MoveBall(onComplete); }));
+        }
+
+        private void MoveBall(Action onComplete)
+        {
+            _ball.transform.DOMove(_ballEndPoint.position, 0.5f).SetEase(Ease.Linear)
+                .OnComplete((() => { DOVirtual.DelayedCall(1f, () => onComplete?.Invoke()); }));
         }
     }
 }
