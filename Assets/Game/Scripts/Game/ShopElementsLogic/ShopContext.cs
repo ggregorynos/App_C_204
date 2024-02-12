@@ -53,7 +53,12 @@ namespace Game.Scripts.Game.ShopElementsLogic
             get => PlayerPrefs.GetInt(CurrentAdsAlias, 0);
             set
             {
-                var clampValue = Math.Clamp(value, 0, _elements.Count - 1);
+                int clampValue = value;
+                if (value > _elements.Count - 1)
+                {
+                    clampValue = 0;
+                }
+
                 PlayerPrefs.SetInt(CurrentAdsAlias, clampValue);
                 PlayerPrefs.Save();
             }
