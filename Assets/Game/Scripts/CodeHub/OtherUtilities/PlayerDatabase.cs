@@ -45,7 +45,7 @@ namespace CodeHub.OtherUtilities
 
         public int PlayerBalance
         {
-            get => PlayerPrefs.GetInt(playerBalanceAlias, 1000);
+            get => PlayerPrefs.GetInt(playerBalanceAlias, 2000);
             private set
             {
                 PlayerPrefs.SetInt(playerBalanceAlias, value);

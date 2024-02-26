@@ -42,7 +42,7 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
             {
                 RemoveBetData(button);
                 UpdatePlayBtnStatus();
-                _betInputController.UpdateBtns();
+                //_betInputController.UpdateBtns();
                 return;
             }
 
@@ -60,7 +60,7 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
 
             AddBetData(button);
             UpdatePlayBtnStatus();
-            _betInputController.UpdateBtns();
+            //_betInputController.UpdateBtns();
         }
 
         public void ResetField()
@@ -84,8 +84,12 @@ namespace Game.Scripts.Game.GameLogic.BetLogic
             UpdateWinTxt();
         }
 
-        public void UpdatePlayBtnStatus() =>
+        public void UpdatePlayBtnStatus()
+        {
+            bool enablePlayBtn= !(BetDataHolder.Colors.Count == 0 && BetDataHolder.Numbers.Count == 0);
             _playBtn.interactable = !(BetDataHolder.Colors.Count == 0 && BetDataHolder.Numbers.Count == 0);
+            _betInputController.EnableBetBtns(!enablePlayBtn);
+        }
 
         private void AddBetData(BaseBetButton baseBetButton)
         {

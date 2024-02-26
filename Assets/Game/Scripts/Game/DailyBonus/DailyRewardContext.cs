@@ -103,7 +103,7 @@ namespace Game.Scripts.Game.DailyBonus
             if (_currentRewardData == _rewards.FirstOrDefault())
                 _rewardTxt.text = sector.Value + "";
             else
-                _rewardTxt.text = sector.Value.ToString("# ##0") + " X" + _currentRewardData.Xreward;
+                _rewardTxt.text = sector.Value.ToString("# ##0") + " x" + _currentRewardData.Xreward;
 
             _playerDatabase.IncreasePlayerBalance(sector.Value * _currentRewardData.Xreward);
         }

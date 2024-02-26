@@ -176,7 +176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2479997051622438334, guid: 41ad9dbb8400547c0b2bcc64919c85c0, type: 3}
       propertyPath: _testMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2479997051622438334, guid: 41ad9dbb8400547c0b2bcc64919c85c0, type: 3}
       propertyPath: _gameIdIos
