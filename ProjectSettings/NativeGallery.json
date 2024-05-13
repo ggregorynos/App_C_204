@@ -1,0 +1,6 @@
+{
+    "AutomatedSetup": true,
+    "PhotoLibraryUsageDescription": "App requesting Photo Gallery access for image uploads and personalized profiles",
+    "PhotoLibraryAdditionsUsageDescription": "The app requires access to Photos to save media to it.",
+    "DontAskLimitedPhotosPermissionAutomaticallyOnIos14": true
+}
